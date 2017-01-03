@@ -2,28 +2,25 @@
 defined in anagram.py into a web service that takes in a function name and a string and
 returns JSON output."""
 
-import anagrams
-import word_functions
+
+import wordlist_reader
+from total_word_search import PRED_FUNCS, WORD_FUNCS, master_word_search
 
 import flask
-
-
-# for automatic URL routing, give each function a URL name
-WORD_FUNCS = {"anagram": anagrams.anagram, "subanagrams": word_functions.subanagrams, "hooks":
-              word_functions.hooks, "back-hooks": word_functions.back_hooks, "front-hooks":
-              word_functions.front_hooks, "pattern-match": word_functions.pattern_match}
-
-# for functions that return True or False and have more than 1 parameter
-PRED_FUNCS = {"length-in-range": word_functions.length_in_range, "contains-letters":
-              word_functions.contains_letters, "only-contains-letters":
-              word_functions.only_contains_letters, "does-pattern-match":
-              word_functions.does_pattern_match, "does-anagram": word_functions.does_anagram,
-              "does_subanagram": word_functions.does_subanagram}
 
 app = flask.Flask(__name__)
 
 
-@app.route("/<dictname>/<function>/<query>")
+def make_int_if_int(string):
+    """If the string is a valid integer, returns the integral form of it, otherwise returns the
+    string."""
+    if all([c in "0123456789" for c in string]):
+        return int(string)
+    else:
+        return string
+
+
+@app.route("/<dictname>/<function>/<query>", methods=["GET"])
 def execute_query(dictname, function, query):
     """Executes the given function on the query. Every function returns a JSON list of words unless it
     is a predicate function, which returns True or False and has many argument separated by
@@ -35,5 +32,22 @@ def execute_query(dictname, function, query):
         # parse string into arguments
         args = query.split('-')
         # parse integers
-        args = [int(x) if all([char in "1234567890" for char in x]) else x for x in args]
+        args = [make_int_if_int(x) for x in args]
         return flask.jsonify(PRED_FUNCS[function](*args))
+
+
+@app.route("/<dictname>/search/<queries>")
+def execute_master_search(dictname, queries):
+    """Takes in a query string (underscores separate arguments, tildes separate different
+    predicates, and returns a JSON list of every word that meets the given criteria."""
+    query_strings = queries.split('~')
+    query_strings = [q.split('_') for q in query_strings]
+    query_strings = [[make_int_if_int(x) for x in q] for q in query_strings]
+
+    return flask.jsonify(master_word_search(query_strings, dictname))
+
+
+@app.route("/list-lexicons", methods=["GET"])
+def list_valid_lexicons():
+    """Lists all valid dictionary names as a JSON list."""
+    return flask.jsonify(list(wordlist_reader.DICTIONARIES))

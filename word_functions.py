@@ -107,17 +107,17 @@ def hooks(word, dictname="OWL2"):
     return (front_hooks(word, dictname), back_hooks(word, dictname))
 
 
-def length_in_range(word, min_len, max_len):
+def length_in_range(min_len, max_len, word):
     """Returns True if the word's length is between min_len and max_len, inclusive."""
     return min_len <= len(word) <= max_len
 
 
-def only_contains_letters(word, tiles):
+def only_contains_letters(tiles, word):
     """Returns True if and only if there are no letters in the word outside of the iterable
     letters."""
     return all([c in tiles.upper() for c in word.upper()])
 
 
-def contains_letters(word, tiles):
+def contains_letters(tiles, word):
     """Returns True if and only if every letter in tiles is in word."""
     return all([letter in word.upper() for letter in tiles.upper()])

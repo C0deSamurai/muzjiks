@@ -112,17 +112,24 @@ class TestWordFunctions(unittest.TestCase):
     def test_length_in_range(self):
         # also dumb
         for query in ("COME", "ON", "NOW"):
-            self.assertTrue(word_functions.length_in_range(query, 2, 4))
+            self.assertTrue(word_functions.length_in_range(2, 4, query))
 
         for query in ("I", "CAN", "DO", "COOLER", "THINGS"):
-            self.assertFalse(word_functions.length_in_range(query, 7, 9))
+            self.assertFalse(word_functions.length_in_range(7, 9, query))
 
     def test_contains_letters(self):
-        self.assertTrue(word_functions.contains_letters("DISTASTEFUL", "TAEDS"))
-        self.assertFalse(word_functions.contains_letters("DISTASTEFUL", "FOLD"))
-        self.assertTrue(word_functions.contains_letters("TEST", ""))
-        self.assertFalse(word_functions.contains_letters("", "TEST"))
-        self.assertTrue(word_functions.contains_letters("TEST", "set"))
+        self.assertTrue(word_functions.contains_letters("TAEDS", "DISTASTEFUL"))
+        self.assertFalse(word_functions.contains_letters("FOLD", "DISTASTEFUL"))
+        self.assertFalse(word_functions.contains_letters("TEST", ""))
+        self.assertTrue(word_functions.contains_letters("", "TEST"))
+        self.assertTrue(word_functions.contains_letters("set", "TEST"))
+
+    def test_only_contains_letters(self):
+        self.assertTrue(word_functions.only_contains_letters("TEST", "SET"))
+        self.assertTrue(word_functions.only_contains_letters("ABCDR", "AbRaCaDaBrA"))
+        self.assertTrue(word_functions.only_contains_letters("ANYTHING", ""))
+        self.assertFalse(word_functions.only_contains_letters("TEST", "TESTING"))
+        self.assertFalse(word_functions.only_contains_letters("", "ANYTHING"))
 
 if __name__ == "__main__":
     unittest.main()
