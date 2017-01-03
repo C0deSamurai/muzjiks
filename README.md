@@ -28,7 +28,6 @@ in languages that aren't English.
 Major TODOS:
  * Playability and probability functions?
  * Clean changing dictionaries
- * Predicate subanagram function
  * Snazzy UI
  
  

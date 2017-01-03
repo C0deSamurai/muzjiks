@@ -41,6 +41,14 @@ class TestWordFunctions(unittest.TestCase):
         # used anagrammer.com/scrabble/ to check this list
         self.assertEqual(len(word_functions.subanagrams("SATE??")), 3649)
 
+    def test_does_subanagram(self):
+        self.assertTrue(word_functions.does_subanagram("SATE?", "YEAST"))
+        self.assertTrue(word_functions.does_subanagram("EXPLICATED", "PATE"))
+        self.assertTrue(word_functions.does_subanagram("CORRECT???", "RECtory"))
+        self.assertFalse(word_functions.does_subanagram("NO??", "LOLNO"))
+        self.assertFalse(word_functions.does_subanagram("YES???", "HHYYESSZZ"))
+        self.assertFalse(word_functions.does_subanagram("fine", "HELLO"))
+
     def test_regex_search(self):
         # test nothing
         self.assertEqual(word_functions.regex_search(""), [])

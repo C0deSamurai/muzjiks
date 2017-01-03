@@ -41,6 +41,18 @@ def subanagrams(word):
         return list(set(total_subanagrams))
 
 
+def does_subanagram(query, word):
+    """Returns True if the query, with optional blanks, can match the given word."""
+    if '?' in query:
+        query_sans_blanks = query.replace('?', '')
+        for letter_combo in gen_blanks(query.count('?')):
+            if does_subanagram(query_sans_blanks + ''.join(letter_combo), word):
+                return True
+        return False
+    else:
+        return get_prime_product(query) % get_prime_product(word) == 0
+
+
 def regex_search(pattern):
     """Returns all words that match the regex pattern, case-insensitive."""
     modified_pattern = '^' + pattern + '$'  # only match complete words
