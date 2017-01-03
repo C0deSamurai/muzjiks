@@ -70,6 +70,13 @@ class TestWordFunctions(unittest.TestCase):
         self.assertSetEqual(set(word_functions.pattern_match("Z?X*")),
                             {"ZAX", "ZAXES"})
 
+    def test_does_pattern_match(self):
+        # mostly superfluous because it's a thin wrapper around regex matching, but good to have
+        self.assertTrue(word_functions.does_pattern_match("A?A****A*", "ALACARTE"))
+        self.assertTrue(word_functions.does_pattern_match("?ACK?ACK*", "backpacking"))
+        self.assertFalse(word_functions.does_pattern_match("*A", "carriage"))
+        self.assertFalse(word_functions.does_pattern_match("CORRECT?", "NO"))
+
     def test_front_hooks(self):
         # simple: this should be equivalent to pattern matching, if it isn't say something
         for query in ("ATE", "AE", "EX", "MO", "NERVATE", "VERT", "VERSION"):

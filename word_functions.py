@@ -52,6 +52,18 @@ def pattern_match(query):
             return []
 
 
+def does_pattern_match(query, word):
+    """Returns True if and only if the pattern described by query (with ? and/or *) matches word."""
+    if '?' in query:
+        for letter in letters:
+            if does_pattern_match(query.replace('?', letter, 1), word):
+                return True
+        return False
+    else:
+        modified_pattern = '^' + query.replace('*', '.*') + '$'
+        return bool(re.match(modified_pattern, word, re.IGNORECASE))
+
+
 def front_hooks(word):
     """Given a literal word with just letters, finds all letters that can go in front of the
     word, sorted alphabetically."""
