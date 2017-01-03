@@ -18,6 +18,10 @@ class TestAnagrams(unittest.TestCase):
         for string in ("ETA", "eta", "AtE", "Tea"):
             self.assertListEqual(anagrams.anagram(string), anagrams.anagram("TEA"))
 
+    def test_dictionary_choice(self):
+        # POBOY is in OWL2 but not OWL1
+        self.assertNotEqual(anagrams.anagram("POOBY", "OWL2"), anagrams.anagram("POOBY", "OWL"))
+
 
 if __name__ == "__main__":
     unittest.main()

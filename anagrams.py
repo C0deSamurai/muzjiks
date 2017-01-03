@@ -6,6 +6,7 @@ letter. In this way, if two words share a prime product they are anagrams, and v
 You can access the dictionary simply by using anagram_dict, or the anagram() function."""
 
 
+from functools import lru_cache
 from itertools import combinations_with_replacement
 
 from wordlist_reader import wordlist
@@ -39,6 +40,13 @@ def gen_anagram_dictionary(words):
     return anagram_dict
 
 
+# make this essentially a variable down to lexicon choice
+@lru_cache(4)
+def anagram_dict(dictname="OWL2"):
+    """Provides a getter function that returns an anagram dictionary with the desired wordlist."""
+    return gen_anagram_dictionary(wordlist(dictname))
+
+
 def write_anagram_dict_to_file(filename, words):
     """Writes a text file with the anagram dictionary to a file for further use."""
     anag_dict = gen_anagram_dictionary(words)
@@ -65,7 +73,7 @@ def gen_blanks(num_blanks):
     return combinations_with_replacement(letters, num_blanks)
 
 
-def anagram(word):
+def anagram(word, dictname="OWL2"):
     """Anagrams the given set of letters. ? stands for a blank: it can be anything. Returns a list
     of anagrams."""
     if '?' in word:
@@ -76,9 +84,6 @@ def anagram(word):
         return all_anagrams
     else:
         val = get_prime_product(word)
-        return anagram_dict.get(val, [])
+        return anagram_dict(dictname).get(val, [])
 
-
-# I was going to read this in from a file on startup, but performance testing showed it was just as
-# fast to generate it on the spot
-anagram_dict = gen_anagram_dictionary(wordlist())
+    

@@ -23,13 +23,14 @@ PRED_FUNCS = {"length-in-range": word_functions.length_in_range, "contains-lette
 app = flask.Flask(__name__)
 
 
-@app.route("/<function>/<query>")
-def execute_query(function, query):
+@app.route("/<dictname>/<function>/<query>")
+def execute_query(dictname, function, query):
     """Executes the given function on the query. Every function returns a JSON list of words unless it
-    is a predicate function, which returns True or False and has many argument separated by hyphens.
+    is a predicate function, which returns True or False and has many argument separated by
+    hyphens. Uses the dictionary name given in the URL if it isn't a predicate function.
     """
     if function in WORD_FUNCS:
-        return flask.jsonify(WORD_FUNCS[function](query))
+        return flask.jsonify(WORD_FUNCS[function](query, dictname))
     else:
         # parse string into arguments
         args = query.split('-')

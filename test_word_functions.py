@@ -4,11 +4,6 @@ import unittest
 
 class TestWordFunctions(unittest.TestCase):
 
-    # examples only work for OWL2
-    def setUp(self):
-        with open("dictname.txt") as cfgfile:
-            self.assertEqual(cfgfile.read()[:-1], "OWL2")
-
     def test_does_anagram(self):
         self.assertTrue(word_functions.does_anagram("QA???", "SQUaB"))
         self.assertTrue(word_functions.does_anagram("MEDICAL", "DECLAIM"))
@@ -40,6 +35,10 @@ class TestWordFunctions(unittest.TestCase):
         # test a word with lots of subanagrams, but just check the length
         # used anagrammer.com/scrabble/ to check this list
         self.assertEqual(len(word_functions.subanagrams("SATE??")), 3649)
+
+        # test that dictionary support works
+        self.assertNotEqual(word_functions.subanagrams("CORR?", "WWF"),
+                            word_functions.subanagrams("CORR?", "OWL2"))
 
     def test_does_subanagram(self):
         self.assertTrue(word_functions.does_subanagram("SATE?", "YEAST"))

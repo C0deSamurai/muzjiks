@@ -16,19 +16,17 @@ for dict_file in Path("dictionaries/").glob("*.txt"):
     DICTIONARIES[dict_file.stem] = dict_file
 
 
-def import_text_file(filename):
-    """Given a text file, strips the whitespace and splits into lines, returning a list in the
+def import_text_file(dictname="OWL2"):
+    """Given a lexicon name, strips the whitespace and splits into lines, returning a list in the
     original order."""
-    with open(filename, 'r') as infile:
+    with DICTIONARIES[dictname].open() as infile:
         return [line.strip() for line in infile]
 
 
 @lru_cache(4)  # important, because wordlists are big so we memoize and save some data
-def wordlist(config_file="dictname.txt"):
-    """Returns a list of words. Goes to the given configuration file, and reads in the entire
-    file. Tries to match that filename to a dictionary, and then returns that word list."""
-    with open(config_file, 'r') as cfgfile:
-        return import_text_file(str(DICTIONARIES[cfgfile.read().strip()]))
+def wordlist(dictname="OWL2"):
+    """Returns a list of words that correspond to the given lexicon name."""
+    return import_text_file(dictname)
 
 
 def gen_definitions(filename):
@@ -54,6 +52,6 @@ def gen_definitions(filename):
 # does not work right now lol
 
 
-def check(word):
+def check(word, dictname="OWL2"):
     """Case-insensitively checks a word. Returns True if it is valid, and False otherwise."""
-    return word.upper() in wordlist()
+    return word.upper() in wordlist(dictname)

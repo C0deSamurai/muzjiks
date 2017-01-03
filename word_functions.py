@@ -20,7 +20,7 @@ def does_anagram(query, word):
     return goal_prod % no_blanks_prod == 0 and goal_prod // no_blanks_prod > (2 * query.count('?'))
 
 
-def subanagrams(word):
+def subanagrams(word, dictname="OWL2"):
     """Returns a list of every word that can be made from any subset of the letters, including ?'s
     for blanks."""
     if '?' in word:  # blanks
@@ -30,14 +30,14 @@ def subanagrams(word):
         total_subanagrams = []
         word_sans_blanks = word.replace('?', '')
         for letter_combo in gen_blanks(word.count('?')):
-            total_subanagrams += subanagrams(word_sans_blanks + ''.join(letter_combo))
+            total_subanagrams += subanagrams(word_sans_blanks + ''.join(letter_combo), dictname)
         return list(set(total_subanagrams))
     else:
         base_prod = get_prime_product(word.upper())
         total_subanagrams = []
-        for prod in anagram_dict:
+        for prod in anagram_dict(dictname):
             if base_prod % prod == 0:  # subanagram
-                total_subanagrams += anagram_dict[prod]
+                total_subanagrams += anagram_dict(dictname)[prod]
         return list(set(total_subanagrams))
 
 
@@ -53,25 +53,25 @@ def does_subanagram(query, word):
         return get_prime_product(query) % get_prime_product(word) == 0
 
 
-def regex_search(pattern):
+def regex_search(pattern, dictname="OWL2"):
     """Returns all words that match the regex pattern, case-insensitive."""
     modified_pattern = '^' + pattern + '$'  # only match complete words
-    return [word for word in wordlist() if re.match(modified_pattern, word, re.IGNORECASE)]
+    return [word for word in wordlist(dictname) if re.match(modified_pattern, word, re.IGNORECASE)]
 
 
-def pattern_match(query):
+def pattern_match(query, dictname="OWL2"):
     """Simply searches for the pattern in the dictionary and returns a list of matches. ? is a
     blank, and * is any number of letters."""
     if '?' in query:  # recursively substitute
         all_patterns = []
         for letter in letters:
-            all_patterns += pattern_match(query.replace('?', letter, 1))
+            all_patterns += pattern_match(query.replace('?', letter, 1), dictname)
         return all_patterns
     elif '*' in query:
         # regex is slow as molasses but I don't know how to make this better
-        return regex_search(query.replace('*', '.*'))
+        return regex_search(query.replace('*', '.*'), dictname)
     else:
-        if check(query):
+        if check(query, dictname):
             return [query]
         else:
             return []
@@ -89,22 +89,22 @@ def does_pattern_match(query, word):
         return bool(re.match(modified_pattern, word, re.IGNORECASE))
 
 
-def front_hooks(word):
+def front_hooks(word, dictname="OWL2"):
     """Given a literal word with just letters, finds all letters that can go in front of the
     word, sorted alphabetically."""
-    return sorted([letter for letter in letters if check(letter + word.upper())])
+    return sorted([letter for letter in letters if check(letter + word.upper(), dictname)])
 
 
-def back_hooks(word):
+def back_hooks(word, dictname="OWL2"):
     """Given a literal word, finds all the letters that can be added to the back, sorted
     alphabetically."""
-    return sorted([letter for letter in letters if check(word.upper() + letter)])
+    return sorted([letter for letter in letters if check(word.upper() + letter, dictname)])
 
 
-def hooks(word):
+def hooks(word, dictname="OWL2"):
     """Given a literal word, returns a tuple (front, back) with both the front and back hooks of the
     word."""
-    return (front_hooks(word), back_hooks(word))
+    return (front_hooks(word, dictname), back_hooks(word, dictname))
 
 
 def length_in_range(word, min_len, max_len):
