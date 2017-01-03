@@ -31,7 +31,7 @@ def subanagrams(word):
 def regex_search(pattern):
     """Returns all words that match the regex pattern, case-insensitive."""
     modified_pattern = '^' + pattern + '$'  # only match complete words
-    return [word for word in wordlist if re.match(modified_pattern, word, re.IGNORECASE)]
+    return [word for word in wordlist() if re.match(modified_pattern, word, re.IGNORECASE)]
 
 
 def pattern_match(query):
@@ -46,7 +46,7 @@ def pattern_match(query):
         # regex is slow as molasses but I don't know how to make this better
         return regex_search(query.replace('*', '.*'))
     else:
-        if query in wordlist:
+        if check(query):
             return [query]
         else:
             return []

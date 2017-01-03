@@ -4,6 +4,11 @@ import unittest
 
 class TestWordFunctions(unittest.TestCase):
 
+    # examples only work for OWL2
+    def setUp(self):
+        with open("dictname.txt") as cfgfile:
+            self.assertEqual(cfgfile.read()[:-1], "OWL2")
+
     def test_subanagrams(self):
         # test nothing
         self.assertEqual(word_functions.subanagrams(""), [])

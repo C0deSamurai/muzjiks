@@ -81,4 +81,4 @@ def anagram(word):
 
 # I was going to read this in from a file on startup, but performance testing showed it was just as
 # fast to generate it on the spot
-anagram_dict = gen_anagram_dictionary(wordlist)
+anagram_dict = gen_anagram_dictionary(wordlist())
