@@ -9,6 +9,12 @@ class TestWordFunctions(unittest.TestCase):
         with open("dictname.txt") as cfgfile:
             self.assertEqual(cfgfile.read()[:-1], "OWL2")
 
+    def test_does_anagram(self):
+        self.assertTrue(word_functions.does_anagram("QA???", "SQUaB"))
+        self.assertTrue(word_functions.does_anagram("MEDICAL", "DECLAIM"))
+        self.assertFalse(word_functions.does_anagram("MEDICAL", "LOLNO"))
+        self.assertFalse(word_functions.does_anagram("QA???", "QAT"))
+
     def test_subanagrams(self):
         # test nothing
         self.assertEqual(word_functions.subanagrams(""), [])

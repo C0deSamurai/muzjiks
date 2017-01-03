@@ -16,7 +16,8 @@ WORD_FUNCS = {"anagram": anagrams.anagram, "subanagrams": word_functions.subanag
 # for functions that return True or False and have more than 1 parameter
 PRED_FUNCS = {"length-in-range": word_functions.length_in_range, "contains-letters":
               word_functions.contains_letters, "only-contains-letters":
-              word_functions.only_contains_letters}
+              word_functions.only_contains_letters, "does-pattern-match":
+              word_functions.does_pattern_match, "does-anagram": word_functions.does_anagram}
 
 app = flask.Flask(__name__)
 

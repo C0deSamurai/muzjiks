@@ -7,6 +7,19 @@ from wordlist_reader import check, wordlist
 import re
 
 
+def does_anagram(query, word):
+    """Returns True if and only if query, with optional blanks, can anagram to word."""
+    # have to be careful when you're clever: with this nifty modulo hack to avoid having to actually
+    # anagram anything, blanks are counted as optional which isn't ideal, so make sure that if the
+    # query without blanks is at least a subanagram of the word that by adding blanks you get where
+    # you need to be
+    no_blanks_prod = get_prime_product(query.replace('?', ''))
+    goal_prod = get_prime_product(word)
+    # the minimum factor that can separate them is all E's, which means that for every blank you
+    # multiply the prime product by 2
+    return goal_prod % no_blanks_prod == 0 and goal_prod // no_blanks_prod > (2 * query.count('?'))
+
+
 def subanagrams(word):
     """Returns a list of every word that can be made from any subset of the letters, including ?'s
     for blanks."""

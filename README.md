@@ -23,3 +23,15 @@ Thelen. MUZJIKS (as of this writing) does not allow you to use the copyrighted O
 or the "cleaned" OSPD5 list, but it does provide the earlier OWL2 and OSPD4 lists as well as other
 dictionaries of use to people who play word games that aren't Scrabble or who want to play Scrabble
 in languages that aren't English.
+
+
+Major TODOS:
+ * Playability and probability functions?
+ * Clean changing dictionaries
+ * Predicate subanagram function
+ * Snazzy UI
+ 
+ 
+## A Note on Testing ##
+There are helpfully-written unit tests for the anagrams and word_functions modules. If anyone wants
+to submit changes, make sure those run without error and also reflect any new features.
